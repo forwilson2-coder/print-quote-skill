@@ -4,34 +4,26 @@ HP Indigo 对开数码印刷报价 QwenPaw agent skill（💰）。适用于骑�
 
 ## 文件
 
-- `SKILL.md` — 完整规则、计价口径、输出模板与回归算例
-- `scripts/quote.py` — 报价计算脚本（价格硬编码，仅标准库）
-- `scripts/quote_xlsx.py` — **自定义价格版**：价格从 xlsx 报价表读取，改表即改价（依赖 openpyxl）
+- `SKILL.md` — 技能说明：计价口径、价格表结构、输出模板
+- `scripts/quote_xlsx.py` — 报价计算脚本（**价格从 xlsx 表格读取，改表即改价**）
 - `scripts/prices_template.xlsx` — **空价格表模板**，表头与克重行已建好、价格留空，复制后填价即可使用
-- `scripts/quote.json` — `run_tool_batch` 批处理入口（QwenPaw 环境内使用）
 
-## 用法
-
-原版（硬编码价格）：
+## 快速开始
 
 ```bash
-python3 scripts/quote.py 210 297 24 10 250-copper-double 157-copper-double matte saddle
-```
-
-自定义价格版（从 xlsx 表读价）：
-
-```bash
+pip install openpyxl
 python3 scripts/quote_xlsx.py scripts/prices_template.xlsx 210 297 24 10 250-copper-double 157-copper-double matte saddle
 ```
 
-参数说明：`成品宽高mm 总P数 本数 封面纸张 内文纸张 覆膜 装订方式`。
+参数：`<价格表.xlsx> 成品宽mm 成品高mm 总P数 本数 封面纸张 内文纸张 覆膜 装订方式`
+
 纸张格式 `<克重>-<类型(copper/woodfree/card/self)>-<double/single>`（自带纸写 `self-single`）；覆膜 `none|matte|glossy`；装订 `saddle|glue|lock|hard-nail|hard-butterfly|hard-lock`。
 
 ## 价格表结构（prices_template.xlsx）
 
 | 位置 | 内容 |
 |---|---|
-| A~C 列 | 铜版：克重 + 双面/单面单价 |
+| A~C 列 | 铜版：克重 + 双面/单面单价（元/张·对开） |
 | D~F 列 | 胶版纸：克重 + 双面/单面单价 |
 | G~I 列 | 白卡纸：克重 + 双面/单面单价 |
 | J 列 | 自带纸单面价（双面自动 ×2） |
@@ -44,4 +36,4 @@ python3 scripts/quote_xlsx.py scripts/prices_template.xlsx 210 297 24 10 250-cop
 - 1 张对开纸 = 8P（每面 4P）；双面价 = 每张对开纸印双面的价格
 - 出血：成品尺寸上下左右各 +3mm 后拼版；HP 对开打印面积 510×740mm
 - 单面印刷纸照算（张数与双面相同），仅单价换单面价
-- 覆膜按封面对开张数计；骑马钉 0.5 元/本；胶钉分铜版/胶版两种价
+- 覆膜按封面对开张数计；骑马钉/胶钉按本；精装按本数阶梯
