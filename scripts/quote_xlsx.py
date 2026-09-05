@@ -91,11 +91,13 @@ def load_price_table(path):
         papers[typ] = prices
 
     self_single = num(cell(ws, 'J', 3))          # 自带纸单面
+    self_double = num(cell(ws, 'K', 3))          # 自带纸双面（可选，不填则按单面×2）
     papers['self'] = self_single
 
     return {
         'sheet_w': SHEET_W, 'sheet_h': SHEET_H, 'bleed': BLEED,
         'papers': papers,
+        'self_double': self_double,
         'saddle': num(cell(ws, 'D', 8)),
         'glue_copper': num(cell(ws, 'E', 8)),
         'glue_woodfree': num(cell(ws, 'F', 8)),
@@ -107,7 +109,10 @@ def load_price_table(path):
 
 def paper_price(tbl, typ, gram, side):
     if typ == 'self':
-        return tbl['papers']['self'] * 2 if side == 'double' else tbl['papers']['self']
+        if side == 'double':
+            dbl = tbl.get('self_double')
+            return dbl if dbl is not None else tbl['papers']['self'] * 2
+        return tbl['papers']['self']
     d, s = tbl['papers'][typ][gram]
     return d if side == 'double' else s
 
