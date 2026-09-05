@@ -1,0 +1,10 @@
+{
+  "actions": [
+    {
+      "tool_name": "execute_shell_command",
+      "arguments": {
+        "command": "python3 ${args.skill_dir}/scripts/quote.py ${args.w} ${args.h} ${args.p} ${args.copies} ${args.cover} ${args.inner} ${args.lamination} ${args.binding}"
+      }
+    }
+  ]
+}
