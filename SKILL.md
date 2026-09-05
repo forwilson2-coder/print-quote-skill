@@ -77,6 +77,19 @@ run_tool_batch(
 2. 仍失败则用 `execute_shell_command` 直接跑 `python3 <skill_dir>/scripts/quote.py ...` 手工执行。
 3. 完成后再告诉用户批处理有问题，并建议用 `edit_file` 修脚本。
 
+## 自定义价格版（xlsx 表格读取，改表即改价）
+
+原版价格硬编码在 `scripts/quote.py`。要改价时用 `scripts/quote_xlsx.py`——价格直接从 xlsx 报价表读取，**改表格即改价，不用碰脚本**：
+
+```
+python3 <skill_dir>/scripts/quote_xlsx.py <报价表.xlsx> w h p copies cover inner lamination binding
+```
+
+- 价格表结构（与 `media/*hp对开报价.xlsx` 相同）：A~C 铜版（克重+双面/单面）、D~F 胶版纸、G~I 白卡纸、J 自带纸单面（双面自动 ×2）；D8/E8/F8/E10=骑马钉/铜版胶钉/胶版胶钉/覆膜；14~17 行=锁线胶装/硬壳打钉/蝴蝶/硬壳锁线 精装阶梯。
+- 空模板：`scripts/prices_template.xlsx`（表头与克重行已建好，价格留空待填，填完即可用）。
+- 依赖：`openpyxl`（原版只有标准库）。
+- 其余计价逻辑（张数、出血、单双面、拼版、输出模板）与 quote.py 完全一致。
+
 ## 手工参考（批处理内部逻辑，调试用）
 
 1. `parse_spec` 解析纸张规格（克重、类型、单双面）。
